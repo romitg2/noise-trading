@@ -18,9 +18,12 @@ export function useSocket(url: string = "ws://localhost:8080") {
     socket.onmessage = (event) => {
         console.log("message received");
       console.log("Received:", event.data);
-      const key = JSON.parse(event.data).stock as string;
-      const price = JSON.parse(event.data).price as number;
-      setData((prev) => ({ ...prev, [key]: price }));
+      const parsed = JSON.parse(event.data);
+      const key = parsed.stock as string;
+      const price = typeof parsed.price === 'number' ? parsed.price : parseFloat(parsed.price);
+      if (!isNaN(price)) {
+        setData((prev) => ({ ...prev, [key]: price }));
+      }
     };
 
     return () => socket.close();

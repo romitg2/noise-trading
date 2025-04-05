@@ -21,7 +21,8 @@ wss.on("connection", (ws) => {
 setInterval(async () => {
   const stocks = await redis.keys("stock:*");
   for (const stock of stocks) {
-    const price = await redis.get(stock);
+    const priceStr = await redis.get(stock);
+    const price = parseFloat(priceStr || '0');
     wss.clients.forEach((ws) => {
       if (ws.readyState === WebSocket.OPEN) {
         console.log("Sending stock update:", stock, price);
