@@ -7,6 +7,9 @@
 generator client {
   provider = "prisma-client-js"
 }
+generator zod {
+  provider       = "zod-prisma-types"
+}
 
 datasource db {
   provider = "postgresql"
